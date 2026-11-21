@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Arvor Project</title>
+<meta name="description" content="The Arvor Project — home of Arvor Linux and The Arvor Index.">
+<meta name="theme-color" content="#f6f4ee">
+<link rel="icon" type="image/png" href="./tap.png">
+<style>
+  @font-face {
+    font-family: "Redaction 35";
+    src: url("./redaction35.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Redaction 35";
+    src: url("./redaction35_bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --paper: #f6f4ee;
+    --ink: #171512;
+    --body: #2b2823;
+    --muted: #6f6a60;
+    --accent: #a83226;
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #14130f;
+    --ink: #ece7db;
+    --body: #c9c3b6;
+    --muted: #8f887a;
+    --accent: #d05a48;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Redaction 35", "Liberation Serif", "Times New Roman", serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  a { color: inherit; }
+
+  /* top bar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 16px clamp(20px, 5vw, 56px);
+    border-bottom: 1px solid var(--ink);
+  }
+  .topbar img { width: 32px; height: 32px; display: block; }
+  .topbar h1 { font-weight: 700; font-size: 18px; }
+  .topbar .org {
+    font-size: 15px;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 1px;
+  }
+  .topbar .org:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .topbar .toggle {
+    margin-left: auto;
+    background: none;
+    border: none;
+    border-bottom: 1px solid transparent;
+    padding: 0 0 1px;
+    font: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .topbar .toggle:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* main */
+  main {
+    flex: 1;
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: clamp(40px, 8vh, 84px) clamp(20px, 5vw, 56px) 72px;
+  }
+
+  .label {
+    font-size: 13px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    column-gap: 22px;
+    padding: 36px 0;
+    border-top: 1px solid var(--ink);
+  }
+  .row:last-of-type { border-bottom: 1px solid var(--ink); }
+
+  .row .icon { grid-column: 1; grid-row: 1; width: 56px; height: 56px; }
+  .row .content { grid-column: 2; grid-row: 1; }
+
+  .kicker {
+    font-size: 13px;
+    letter-spacing: .18em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  h2 { font-weight: 700; font-size: clamp(30px, 4.6vw, 42px); line-height: 1.05; }
+  h2 a { text-decoration: none; }
+  h2 a:hover { color: var(--accent); }
+
+  .desc {
+    font-size: 19px;
+    line-height: 1.55;
+    max-width: 58ch;
+    margin-top: 12px;
+    color: var(--body);
+  }
+
+  .links { display: flex; gap: 26px; margin-top: 18px; flex-wrap: wrap; }
+  .links a {
+    font-size: 16px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+  }
+  .links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  @media (max-width: 560px) {
+    .row { grid-template-columns: 1fr; }
+    .row .icon { grid-column: 1; grid-row: 1; margin-bottom: 16px; }
+    .row .content { grid-column: 1; grid-row: 2; }
+    .desc { font-size: 17px; }
+  }
+</style>
+<script>
+  (function () {
+    var t = localStorage.getItem("arvor-theme");
+    if (!t) t = window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <img src="./tap.png" alt="The Arvor Project logo">
+  <h1>The Arvor Project</h1>
+  <button class="toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">dark</button>
+  <a class="org" href="https://github.com/TheArvorProject">github &#8599;</a>
+</header>
+
+<main>
+  <p class="label">Projects</p>
+
+  <section class="row">
+    <img class="icon" src="./arv.png" alt="Arvor Linux logo">
+    <div class="content">
+      <p class="kicker">01</p>
+      <h2><a href="https://thearvorproject.github.io/arvor">Arvor Linux</a></h2>
+      <p class="desc">An atomic but not immutable distribution using EXT4 or XFS with LVM.</p>
+      <div class="links">
+        <a href="https://thearvoproject.github.io/arvor">website &#8599;</a>
+        <a href="https://github.com/TheArvorProject/arvor">github &#8599;</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="row">
+    <img class="icon" src="./arvindex.png" alt="The Arvor Index logo">
+    <div class="content">
+      <p class="kicker">02</p>
+      <h2><a href="https://thearvorindex.github.io">The Arvor Index</a></h2>
+      <p class="desc">The repository containing the Arvor index.</p>
+      <div class="links">
+        <a href="https://thearvorindex.github.io">website &#8599;</a>
+        <a href="https://github.com/TheArvorIndex">github &#8599;</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById("theme-toggle");
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function label() { btn.textContent = root.dataset.theme === "dark" ? "light" : "dark"; }
+    function paint() { meta.content = root.dataset.theme === "dark" ? "#14130f" : "#f6f4ee"; }
+    label();
+    paint();
+    btn.addEventListener("click", function () {
+      var t = root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme = t;
+      localStorage.setItem("arvor-theme", t);
+      label();
+      paint();
+    });
+  })();
+</script>
+
+</body>
+</html>

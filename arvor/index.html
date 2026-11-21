@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arvor Linux — The Arvor Project</title>
+<meta name="description" content="Arvor Linux — an atomic but not immutable distribution using EXT4 or XFS with LVM.">
+<meta name="theme-color" content="#f6f4ee">
+<link rel="icon" type="image/png" href="./arv.png">
+<style>
+  @font-face {
+    font-family: "Redaction 35";
+    src: url("./redaction35.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Redaction 35";
+    src: url("./redaction35_bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --paper: #f6f4ee;
+    --ink: #171512;
+    --body: #2b2823;
+    --muted: #6f6a60;
+    --accent: #a83226;
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #14130f;
+    --ink: #ece7db;
+    --body: #c9c3b6;
+    --muted: #8f887a;
+    --accent: #d05a48;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "Redaction 35", "Liberation Serif", "Times New Roman", serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  a { color: inherit; }
+
+  /* top bar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 16px clamp(20px, 5vw, 56px);
+    border-bottom: 1px solid var(--ink);
+  }
+  .topbar .home {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    text-decoration: none;
+  }
+  .topbar img { width: 32px; height: 32px; display: block; }
+  .topbar .name { font-weight: 700; font-size: 18px; }
+  .topbar .org {
+    font-size: 15px;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 1px;
+  }
+  .topbar .org:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .topbar .toggle {
+    margin-left: auto;
+    background: none;
+    border: none;
+    border-bottom: 1px solid transparent;
+    padding: 0 0 1px;
+    font: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .topbar .toggle:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* main */
+  main {
+    flex: 1;
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: clamp(40px, 8vh, 84px) clamp(20px, 5vw, 56px) 72px;
+  }
+
+  .label {
+    font-size: 13px;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .hero h1 { font-weight: 700; font-size: clamp(40px, 6.5vw, 60px); line-height: 1.02; }
+  .hero .lead {
+    font-size: 21px;
+    line-height: 1.55;
+    max-width: 58ch;
+    margin-top: 16px;
+    color: var(--body);
+  }
+  .hero .links { display: flex; gap: 26px; margin-top: 22px; flex-wrap: wrap; }
+  .hero .links a {
+    font-size: 16px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+  }
+  .hero .links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .hero { margin-bottom: clamp(48px, 9vh, 84px); }
+
+  /* return button */
+  .return {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    color: var(--ink);
+    text-decoration: none;
+    border: 1px solid var(--ink);
+    padding: 9px 18px;
+    margin-bottom: clamp(28px, 6vh, 48px);
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .return .arrow { transition: transform .15s ease; }
+  .return:hover { color: var(--accent); border-color: var(--accent); }
+  .return:hover .arrow { transform: translateX(-3px); }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 36px 0;
+    border-top: 1px solid var(--ink);
+  }
+  .row:last-of-type { border-bottom: 1px solid var(--ink); }
+
+  .kicker {
+    font-size: 13px;
+    letter-spacing: .18em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  h2 { font-weight: 700; font-size: clamp(30px, 4.6vw, 42px); line-height: 1.05; }
+
+  .desc {
+    font-size: 19px;
+    line-height: 1.55;
+    max-width: 58ch;
+    margin-top: 12px;
+    color: var(--body);
+  }
+
+  @media (max-width: 560px) {
+    .desc { font-size: 17px; }
+    .hero .lead { font-size: 19px; }
+  }
+</style>
+<script>
+  (function () {
+    var t = localStorage.getItem("arvor-theme");
+    if (!t) t = window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="home" href="https://thearvorproject.github.io/">
+    <img src="./arv.png" alt="Arvor Linux logo">
+    <span class="name">Arvor Linux</span>
+  </a>
+  <button class="toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">dark</button>
+  <a class="org" href="https://github.com/TheArvorProject/arvor">github &#8599;</a>
+</header>
+
+<main>
+  <a class="return" href="https://thearvorproject.github.io/"><span class="arrow">&#8592;</span>Return to The Arvor Project</a>
+
+  <section class="hero">
+    <h1>Arvor Linux</h1>
+    <p class="lead">An atomic but not immutable distribution using EXT4 or XFS with LVM. The root stays a normal writable volume — packages change it through snapshotted transactions, and if anything goes wrong you roll back.</p>
+    <div class="links">
+      <a href="https://github.com/TheArvorProject/arvor">github &#8599;</a>
+    </div>
+  </section>
+
+  <p class="label">The toolkit</p>
+
+  <section class="row">
+    <div>
+      <p class="kicker">01</p>
+      <h2>nsm</h2>
+      <p class="desc">The snapshot engine. nsm takes LVM snapshots of the root on demand and automatically around package operations rolls the system back to any of them, and cleans up after itself.</p>
+    </div>
+  </section>
+
+  <section class="row">
+    <div>
+      <p class="kicker">02</p>
+      <h2>weld</h2>
+      <p class="desc">The package manager. weld runs apt-compatible transactions against minisign-signed repositories inside a sandboxed tree, and every transaction is backed by a snapshot, so installs and upgrades can be undone.</p>
+    </div>
+  </section>
+
+  <section class="row">
+    <div>
+      <p class="kicker">03</p>
+      <h2>nflxs</h2>
+      <p class="desc">The sandbox runner. nflxs spins up isolated sandboxes of other distributions with their own users, resource limits and syscall filtering for software that lives outside the base system.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById("theme-toggle");
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function label() { btn.textContent = root.dataset.theme === "dark" ? "light" : "dark"; }
+    function paint() { meta.content = root.dataset.theme === "dark" ? "#14130f" : "#f6f4ee"; }
+    label();
+    paint();
+    btn.addEventListener("click", function () {
+      var t = root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme = t;
+      localStorage.setItem("arvor-theme", t);
+      label();
+      paint();
+    });
+  })();
+</script>
+
+</body>
+</html>
